@@ -2,7 +2,6 @@ package com.cardechr.reddit.domain;
 
 import java.util.Date;
 
-import com.cardechr.reddit.service.Children;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)

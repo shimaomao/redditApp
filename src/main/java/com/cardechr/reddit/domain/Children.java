@@ -1,4 +1,4 @@
-package com.cardechr.reddit.service;
+package com.cardechr.reddit.domain;
 
 import java.util.List;
 
