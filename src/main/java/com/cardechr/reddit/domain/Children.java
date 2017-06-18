@@ -1,15 +1,18 @@
 package com.cardechr.reddit.domain;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Children extends Data{
+public class Children{
+ 
+	private Data data;
 
-  public List<String> children;
+	public Data getData() {
+		return data;
+	}
+
+	public void setData(Data data) {
+		this.data = data;
+	}
   
-  public List<String> getChildren(){
-    return children;
-  }
 }
