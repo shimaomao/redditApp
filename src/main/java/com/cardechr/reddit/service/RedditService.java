@@ -40,7 +40,7 @@ public class RedditService {
 	public CompletableFuture<String> getSubreddit(String sub) throws JsonProcessingException, IOException {
 		
 		String url = String.format("https://reddit.com/r/%s/top.json?limit=1", sub);
-		System.out.println(url);
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("User-Agent", "other:com.cardechr.reddit:v1.0 (by /u/redprog12)");
 		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
@@ -61,8 +61,7 @@ public class RedditService {
 		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 		ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 		
-		String resultBody = result.getBody();
-		String response = ons.getJsonBody(resultBody);
+		String response = ons.getJsonBody(result.getBody());
 
 		return response;
 	}
@@ -72,6 +71,7 @@ public class RedditService {
 
 		AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
 
+		// Reddit API recommends JAVA Apps to have custom User-Agent else it response with 429 (Too Many Requests)
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("User-Agent", "other:com.cardechr.reddit:v1.0 (by /u/redprog12)");
 		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
@@ -79,17 +79,14 @@ public class RedditService {
 		List<ListenableFuture<ResponseEntity<String>>> futures = new ArrayList<>();
 		for (String url : urls) {
 			ListenableFuture<ResponseEntity<String>> responseEntityFuture = asyncRestTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
 			futures.add(responseEntityFuture);
 		}
 
-		//List<ResponseEntity<String>> response = new ArrayList<>();
 		List<String> response = new ArrayList<>();
-		for (ListenableFuture<ResponseEntity<String>> future : futures) {		
-			String pretty = ons.getJsonBody(future.get().getBody());	
+		for (ListenableFuture<ResponseEntity<String>> future : futures) {
+			String pretty = ons.getJsonBody(future.get().getBody());
 			response.add(pretty);
 		}
-		
 		return response;
 	}
 }
