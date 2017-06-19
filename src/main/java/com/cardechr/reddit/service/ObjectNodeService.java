@@ -24,13 +24,9 @@ public class ObjectNodeService {
 		ObjectNode childArray = (ObjectNode) children.get(0);
 		ObjectNode childData = (ObjectNode) childArray.path("data");
 
-		// This element was causing me issues (╯°□°）╯︵ ┻━┻ DESTROY IT!!
-		// childData.remove("selftext_html");
-
 		Data data = mapper.readValue(childData.toString(), Data.class);
 
 		// Pretty Print JSON
-		String pretty = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data);
-		return pretty;
+		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data);
 	}
 }

@@ -26,7 +26,7 @@ public class RedditController {
   }
 
   @RequestMapping(value ="/future", method = RequestMethod.GET ,produces = "application/json; charset=UTF-8")
-  public List<String> getSubreddit() throws InterruptedException, ExecutionException, JsonProcessingException, IOException {
+  public List<String> getSubreddits() throws InterruptedException, ExecutionException, JsonProcessingException, IOException {
     
     List<String> list = new ArrayList<>();
     CompletableFuture<String> r1 = redditService.getSubreddit(SUBREDDITS[0]);
@@ -46,12 +46,12 @@ public class RedditController {
   }
   
   @RequestMapping(value = "/", method = RequestMethod.GET, headers = "Accept=application/json")
-  public List<String> getPost() throws InterruptedException, ExecutionException, IOException {
+  public List<String> getSubredditsAsync() throws InterruptedException, ExecutionException, IOException {
     return redditService.getTopPosts();
   }
   
   @RequestMapping(value = "/singlePost", method = RequestMethod.GET, headers = "Accept=application/json")
-  public String getAPost() throws IOException {
+  public String getSubreddit() throws IOException {
     return redditService.getPost(SUBREDDITS[1]);
   }
 }

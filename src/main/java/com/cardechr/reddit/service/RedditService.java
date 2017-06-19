@@ -84,8 +84,7 @@ public class RedditService {
 
 		List<String> response = new ArrayList<>();
 		for (ListenableFuture<ResponseEntity<String>> future : futures) {
-			String pretty = ons.getJsonBody(future.get().getBody());
-			response.add(pretty);
+			response.add(ons.getJsonBody(future.get().getBody()));
 		}
 		return response;
 	}
