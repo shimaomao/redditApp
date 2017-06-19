@@ -35,7 +35,6 @@ public class RedditService {
 		this.ons = ons;
 	}
 
-
 	@Async
 	public CompletableFuture<String> getSubreddit(String sub) throws JsonProcessingException, IOException {
 		
@@ -46,9 +45,8 @@ public class RedditService {
 		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 
 		ResponseEntity<String> results = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-		String r = results.getBody();
-		String response = ons.getJsonBody(r.toString());
-		return CompletableFuture.completedFuture(response);
+
+		return CompletableFuture.completedFuture(ons.getJsonBody(results.getBody().toString()));
 	}
 
 	public String getPost(String sub) throws IOException {
@@ -61,9 +59,7 @@ public class RedditService {
 		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 		ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 		
-		String response = ons.getJsonBody(result.getBody());
-
-		return response;
+		return ons.getJsonBody(result.getBody());
 	}
 
 	// AsyncRestTemplate / ListenableFuture
