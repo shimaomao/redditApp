@@ -38,12 +38,8 @@ public class RedditService {
 	@Async
 	public CompletableFuture<String> getSubreddit(String sub) throws JsonProcessingException, IOException {
 		
-		String url = String.format("https://reddit.com/r/%s/top.json?limit=1", sub);
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("User-Agent", "other:com.cardechr.reddit:v1.0 (by /u/redprog12)");
-		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-
+		String url = String.format("https://reddit.com/r/%s/top.json?limit=1", sub);		
+		HttpEntity<String> entity = setUserAgent();
 		ResponseEntity<String> results = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
 		return CompletableFuture.completedFuture(ons.getJsonBody(results.getBody().toString()));
@@ -54,9 +50,7 @@ public class RedditService {
 		String url = String.format("https://reddit.com/r/%s/top.json?limit=1", sub);
 		
 		RestTemplate restTemplate = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("User-Agent", "other:com.cardechr.reddit:v1.0 (by /u/redprog12)");
-		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+		HttpEntity<String> entity = setUserAgent();
 		ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 		
 		return ons.getJsonBody(result.getBody());
@@ -66,11 +60,7 @@ public class RedditService {
 	public List<String> getTopPosts() throws IOException, InterruptedException, ExecutionException {
 
 		AsyncRestTemplate asyncRestTemplate = new AsyncRestTemplate();
-
-		// Reddit API recommends JAVA Apps to have custom User-Agent else it response with 429 (Too Many Requests)
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("User-Agent", "other:com.cardechr.reddit:v1.0 (by /u/redprog12)");
-		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+		HttpEntity<String> entity = setUserAgent();
 
 		List<ListenableFuture<ResponseEntity<String>>> futures = new ArrayList<>();
 		for (String url : urls) {
@@ -83,5 +73,13 @@ public class RedditService {
 			response.add(ons.getJsonBody(future.get().getBody()));
 		}
 		return response;
+	}
+	
+  // Reddit API recommends JAVA Apps to have custom User-Agent else it response with 429 (Too Many Requests)
+	private HttpEntity<String> setUserAgent(){
+	  HttpHeaders headers = new HttpHeaders();
+    headers.set("User-Agent", "other:com.cardechr.reddit:v1.0 (by /u/redprog12)");
+    HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+	  return entity;
 	}
 }
